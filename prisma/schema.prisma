@@ -1,0 +1,85 @@
+/**
+ * Day 2: Document persistence for PDF uploads.
+ * Day 4+: Conversation-scoped documents, messages, and sources.
+ * Provider is sqlite for local-first dev.
+ */
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Conversation {
+  id        Int       @id @default(autoincrement())
+  title     String
+  pinned    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  documents Document[]
+}
+
+model Message {
+  id             Int             @id @default(autoincrement())
+  conversationId Int
+  role           String          // 'user' | 'assistant'
+  content        String
+  createdAt      DateTime        @default(now())
+  conversation   Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sources        MessageSource[]
+
+  @@index([conversationId])
+}
+
+model MessageSource {
+  id         Int     @id @default(autoincrement())
+  messageId  Int
+  documentId Int
+  chunkId    Int
+  filename   String
+  chunkIndex Int
+  message    Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+}
+
+model Document {
+  id             Int           @id @default(autoincrement())
+  filename       String
+  originalPath   String
+  sizeBytes      Int
+  createdAt      DateTime      @default(now())
+  conversationId Int?
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  chunks         Chunk[]
+
+  @@index([conversationId])
+}
+
+model Chunk {
+  id          Int         @id @default(autoincrement())
+  documentId  Int
+  chunkIndex  Int
+  text        String
+  tokenCount  Int
+  createdAt   DateTime    @default(now())
+  document    Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  embeddings  Embedding[]
+
+  @@index([documentId])
+}
+
+model Embedding {
+  id        Int      @id @default(autoincrement())
+  chunkId   Int
+  vector    Json
+  model     String
+  createdAt DateTime @default(now())
+  chunk     Chunk    @relation(fields: [chunkId], references: [id], onDelete: Cascade)
+
+  @@index([chunkId])
+}
+

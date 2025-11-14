@@ -1,0 +1,42 @@
+{
+  "name": "second-brain",
+  "version": "1.0.0",
+  "description": "**Purpose**   Personal AI-powered knowledge base. Start local, keep the stack minimal, deploy later.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jafrulamin/Second-Brain.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jafrulamin/Second-Brain/issues"
+  },
+  "homepage": "https://github.com/jafrulamin/Second-Brain#readme",
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.81",
+    "@prisma/client": "^6.18.0",
+    "canvas": "^3.2.0",
+    "next": "^16.0.1",
+    "openai": "^6.7.0",
+    "pdf-parse": "^1.1.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.9.2",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "prisma": "^6.18.0",
+    "typescript": "5.9.3"
+  }
+}
