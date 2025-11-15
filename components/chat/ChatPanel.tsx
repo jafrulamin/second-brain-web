@@ -65,7 +65,7 @@ export default function ChatPanel({
       setMessages((prev) => [...prev, userMessage]);
       
       // Create welcome assistant message
-      const welcomeMessage = `Perfect! I've received your ${fileCount > 1 ? 'files' : 'file'}: ${fileNames}. ${fileCount > 1 ? 'They have' : 'It has'} been processed and embedded successfully. I'm now ready to help you understand, analyze, or answer any questions about ${fileCount > 1 ? 'these documents' : 'this document'}. What would you like to know?`;
+      const welcomeMessage = `Perfect! I have reviewed the ${fileCount > 1 ? 'files' : 'file'} that you have uploaded successfully and I am ready to answer any questions that you have.`;
       
       const assistantMessage: Message = {
         id: `assistant-${Date.now()}`,
