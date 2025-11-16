@@ -1,8 +1,0 @@
--- CreateTable
-CREATE TABLE "Document" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "filename" TEXT NOT NULL,
-    "originalPath" TEXT NOT NULL,
-    "sizeBytes" INTEGER NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
