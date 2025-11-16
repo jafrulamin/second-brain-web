@@ -27,8 +27,60 @@ export async function embedTexts(texts: string[]): Promise<number[][]> {
   } else if (provider === 'openai') {
     // Use OpenAI embeddings
     return await embedWithOpenAI(texts);
+  } else if (provider === 'voyageai') {
+    // Use Voyage AI embeddings (FREE tier, optimized for RAG)
+    return await embedWithVoyageAI(texts);
   } else {
-    throw new Error(`Unknown embedding provider: ${provider}. Supported: ollama, openai`);
+    throw new Error(`Unknown embedding provider: ${provider}. Supported: ollama, openai, voyageai`);
+  }
+}
+
+/**
+ * Generate embeddings using Voyage AI API (FREE tier available, optimized for RAG)
+ */
+async function embedWithVoyageAI(texts: string[]): Promise<number[][]> {
+  if (!cfg.VOYAGE_API_KEY) {
+    throw new Error('VOYAGE_API_KEY not configured. Set it in environment variables.');
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[Voyage AI] Embedding ${texts.length} texts using voyage-2`);
+  }
+
+  try {
+    const response = await fetch('https://api.voyageai.com/v1/embeddings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${cfg.VOYAGE_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'voyage-2',
+        input: texts,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Voyage AI API error (${response.status}): ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.data || !Array.isArray(data.data)) {
+      throw new Error('Invalid response from Voyage AI: missing data array');
+    }
+
+    const embeddings = data.data.map((item: any) => item.embedding);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Voyage AI] Successfully generated ${embeddings.length} embeddings`);
+    }
+
+    return embeddings;
+  } catch (error: any) {
+    console.error('[Voyage AI] Embedding error:', error);
+    throw error;
   }
 }
 

@@ -238,6 +238,14 @@ curl -X POST https://your-app.vercel.app/api/upload
 - Verify you get a response with citations
 - Check that sources are displayed
 
+### 5.4 Verify Keep-Alive Cron Job (Prevents Supabase Pausing)
+1. In Vercel: Settings → Cron Jobs
+2. Verify you see: `/api/cron/keep-alive` scheduled every 5 days
+3. Test manually: `curl https://your-app.vercel.app/api/cron/keep-alive`
+4. Should return: `{ "ok": true, "conversationCount": X }`
+
+**What this does**: Automatically pings your database every 5 days to prevent Supabase from pausing due to inactivity. Your app will stay live 24/7! 🎉
+
 ---
 
 ## 🎯 **STEP 6: Optional Enhancements**

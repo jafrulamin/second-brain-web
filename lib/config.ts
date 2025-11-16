@@ -25,6 +25,7 @@ export const cfg = {
   // API keys for hosted providers
   OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
   GROQ_API_KEY: process.env.GROQ_API_KEY || '',
+  VOYAGE_API_KEY: process.env.VOYAGE_API_KEY || '',
   
   // Storage configuration
   STORAGE_DRIVER: process.env.STORAGE_DRIVER || 'local',
